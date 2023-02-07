@@ -6,16 +6,19 @@ from django.utils.text import slugify
 from .forms import ExpenseForm
 import json
 
+
 def project_list(request):
     project_list = Project.objects.all()
     return render(request, 'budget/project-list.html', {'project_list': project_list})
+
 
 def project_detail(request, project_slug):
     project = get_object_or_404(Project, slug=project_slug)
 
     if request.method == 'GET':
         category_list = Category.objects.filter(project=project)
-        return render(request, 'budget/project-detail.html', {'project': project, 'expense_list': project.expenses.all(), 'category_list': category_list})
+        return render(request, 'budget/project-detail.html',
+                      {'project': project, 'expense_list': project.expenses.all(), 'category_list': category_list})
 
     elif request.method == 'POST':
         form = ExpenseForm(request.POST)
@@ -37,8 +40,8 @@ def project_detail(request, project_slug):
     elif request.method == 'DELETE':
 
         try:
-            id = json.loads(request.body)['id'] #парсинг json данных строки(request.body) в словарь через loads
-            loads = json.loads(request.body) # только для просмотра в terminal
+            id = json.loads(request.body)['id']  # парсинг json данных строки(request.body) в словарь через loads
+            loads = json.loads(request.body)  # только для просмотра в terminal
             print(f'loads: {loads}', type(loads))
             expense = Expense.objects.get(id=id)
             expense.delete()
@@ -58,9 +61,9 @@ class ProjectCreateView(CreateView):
     def form_valid(self, form):
         self.object = form.save()
 
-        categories = self.request.POST.get('categoriesString').split(',') #создаем лист из добавленных категорий JS
+        categories = self.request.POST.get('categoriesString').split(',')  # создаем лист из добавленных категорий JS
         print(self.request.POST)
-        for category in categories: #перебираем лист и добовляем категории в модели
+        for category in categories:  # перебираем лист и добовляем категории в модели
             Category.objects.create(
                 project=Project.objects.get(id=self.object.id),
                 name=category
