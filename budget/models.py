@@ -12,13 +12,14 @@ class Project(models.Model):
         super(Project, self).save(*args, **kwargs) # Project -тип от которого начинается поиск объекта-посредника
         # т.е автовозврат к обычному (непереопределенному) save
 
-    @property # для вызова метода без скобочек()
+    @property
     def budget_left(self):
         expense_list = Expense.objects.filter(project=self)
         total_expense_amount = 0
         for expense in expense_list:
             total_expense_amount += expense.amount
 
+        # temporary solution, because the form currently only allows integer amounts
         total_expense_amount = int(total_expense_amount)
 
         return self.budget - total_expense_amount
