@@ -7,9 +7,9 @@ class Project(models.Model):
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     budget = models.IntegerField()
 
-    def save(self, *args, **kwargs): # автозаполнение слага по имени
+    def save(self, *args, **kwargs):  # автозаполнение слага по имени
         self.slug = slugify(self.name)
-        super(Project, self).save(*args, **kwargs) # Project -тип от которого начинается поиск объекта-посредника
+        super(Project, self).save(*args, **kwargs)  # Project -тип от которого начинается поиск объекта-посредника
         # т.е автовозврат к обычному (непереопределенному) save
 
     @property
@@ -31,6 +31,9 @@ class Project(models.Model):
 
     def get_absolute_url(self):
         return '/' + self.slug
+
+    def __str__(self):
+        return self.name
 
 
 class Category(models.Model):

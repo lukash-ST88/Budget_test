@@ -1,0 +1,14 @@
+pip install pytest
+pip install django-pytest
+pip install factory
+pip install pytest-factoryboy
+pip install Faker
+
+pytest -rP -> print something
+
+#specifying tests
+pytest budget\tests_pytest\
+pytest budget\tests_pytest\test_ex1.py::test_hello_world
+pytest -m "slow"
+
+
